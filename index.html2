@@ -1,0 +1,67 @@
+gener moi sa en site web stp merci  
+
+It seems like I can’t do more advanced data analysis right now. Please try again later. 
+
+You’re out of data analysis for now. Start a free Plus trial for more, or try again tomorrow after 12:12 AM.
+Try Plus free
+
+
+
+
+from pathlib import Path
+import zipfile
+
+out = Path("/mnt/data/queen-natty-africa-site-web")
+out.mkdir(exist_ok=True)
+html = """<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Queen Natty Africa — Rencontre sérieuse</title>
+<style>
+:root{--pink:#c90062;--gold:#f5b51b;--cream:#fff8f2;--ink:#251a32}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:var(--ink);background:#fffaf7}
+header{background:#fff;padding:16px 5%;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 12px #0001;position:sticky;top:0;z-index:4}.logo{font-size:27px;font-weight:800;color:var(--pink)}nav a{margin:0 10px;text-decoration:none;color:#251a32}.btn{border:0;border-radius:28px;padding:13px 22px;background:var(--pink);color:white;font-weight:700;cursor:pointer}
+.hero{min-height:470px;padding:60px 7%;display:flex;align-items:center;color:white;background:linear-gradient(90deg,#55143dbb,#0002),url('https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1800&q=85') center/cover}.hero h1{font-size:50px;max-width:600px;margin:0 0 15px}.hero p{font-size:19px;max-width:560px;line-height:1.6}
+.wrap{max-width:1200px;margin:auto;padding:0 20px}.search{background:#fff;margin-top:-35px;position:relative;border-radius:18px;padding:22px;box-shadow:0 5px 25px #0002}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}input,select,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;font-size:15px}textarea{min-height:100px}
+h2{font-size:28px}.profiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}.card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 5px 20px #0001}.photo{height:250px;background:#eee;display:flex;align-items:center;justify-content:center;font-size:65px}.cardbody{padding:15px}.muted{color:#6c6470;line-height:1.6}.badge{display:inline-block;background:#fff0f6;color:var(--pink);padding:5px 9px;border-radius:20px;font-size:12px}
+.steps{background:var(--cream);padding:38px 0;margin-top:45px}.stepgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}.step{text-align:center}.num{display:inline-flex;width:45px;height:45px;border-radius:50%;align-items:center;justify-content:center;background:var(--pink);color:#fff;font-weight:800}
+.signup{background:linear-gradient(135deg,#a90055,#d92b78);padding:45px 0}.panel{background:#fff;border-radius:18px;padding:28px;max-width:920px;margin:auto}.private{background:#fff7ed;border:1px solid #f2d4b4;padding:16px;border-radius:12px;margin-top:15px}.payment{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.pay{padding:18px;border:1px solid #ddd;border-radius:12px;background:#fff;font-weight:700;cursor:pointer}footer{background:#25102a;color:#fff;text-align:center;padding:28px}
+@media(max-width:700px){nav{display:none}.hero h1{font-size:36px}.stepgrid,.payment{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header><div><span class="logo">💞 Queen Natty Africa</span><small> Rencontre sérieuse</small></div><nav><a href="#recherche">Rechercher</a><a href="#profils">Profils</a><a href="#inscription">Inscription</a></nav><button class="btn" onclick="location.hash='inscription'">Créer mon profil</button></header>
+<section class="hero"><div><h1>Trouvez l’amour qui vous ressemble</h1><p>Une communauté de personnes sérieuses, sincères et engagées.</p><button class="btn" onclick="location.hash='inscription'">Créer mon profil</button></div></section>
+<main class="wrap">
+<section id="recherche" class="search"><h2>Rechercher un profil</h2><div class="grid">
+<div><label>Je recherche</label><select><option>Une femme</option><option>Un homme</option></select></div>
+<div><label>De quel âge ?</label><input type="number" min="18" value="18"></div><div><label>À quel âge ?</label><input type="number" min="18" value="55"></div>
+<div><label>Pays</label><select><option>Tous les pays</option><option>Île Maurice</option><option>Madagascar</option><option>Bénin</option><option>Togo</option><option>Côte d’Ivoire</option><option>Cameroun</option></select></div>
+<div><label>Religion</label><select><option>Toutes les religions</option><option>Chrétien(ne)</option><option>Musulman(e)</option><option>Hindou(e)</option><option>Autre</option></select></div>
+<div style="align-self:end"><button class="btn" style="width:100%">🔎 Rechercher</button></div></div></section>
+<section id="profils"><h2>💗 Profils récents</h2><div class="profiles">
+<div class="card"><div class="photo">👩🏾</div><div class="cardbody"><h3>Aissatou ❤️</h3><div class="muted">28 ans · Côte d’Ivoire<br>Musulmane</div><p>Femme douce et sincère, j’aime découvrir de nouvelles cultures.</p><span class="badge">Rencontre sérieuse</span></div></div>
+<div class="card"><div class="photo">👨🏾</div><div class="cardbody"><h3>Mamadou ❤️</h3><div class="muted">32 ans · Sénégal<br>Musulman</div><p>J’aime les voyages et les belles rencontres.</p><span class="badge">Rencontre sérieuse</span></div></div>
+<div class="card"><div class="photo">👩🏾</div><div class="cardbody"><h3>Fatou ❤️</h3><div class="muted">25 ans · Mali<br>Chrétienne</div><p>Simple, respectueuse et à la recherche d’une relation sérieuse.</p><span class="badge">Rencontre sérieuse</span></div></div>
+<div class="card"><div class="photo">👨🏾</div><div class="cardbody"><h3>Issa ❤️</h3><div class="muted">36 ans · Bénin<br>Chrétien</div><p>Travailleur et attentionné, je veux construire une belle histoire.</p><span class="badge">Rencontre sérieuse</span></div></div>
+</div></section></main>
+<section class="steps"><div class="wrap"><h2 style="text-align:center;color:var(--pink)">Comment ça marche ?</h2><div class="stepgrid">
+<div class="step"><span class="num">1</span><h3>Inscription complète</h3><p>Tous les champs obligatoires doivent être remplis.</p></div>
+<div class="step"><span class="num">2</span><h3>Paiement immédiat</h3><p>45 € pour continuer.</p></div>
+<div class="step"><span class="num">3</span><h3>Publication</h3><p>Après paiement confirmé, l’annonce est publiée.</p></div>
+<div class="step"><span class="num">4</span><h3>Échanger</h3><p>Découvrez les profils qui vous correspondent.</p></div></div></div></section>
+<section id="inscription" class="signup"><div class="panel"><h2>Créer mon profil</h2><p><b>Tous les champs sont obligatoires.</b> Après l’inscription complète, le paiement de 45 € est demandé immédiatement.</p>
+<div class="grid">
+<div><label>📷 Photo *</label><input type="file" accept="image/*" required></div><div><label>Nom / prénom affiché *</label><input required></div>
+<div><label>Âge *</label><input type="number" min="18" required></div><div><label>Pays *</label><input required></div>
+<div><label>Religion *</label><select required><option value="">Choisir</option><option>Chrétien(ne)</option><option>Musulman(e)</option><option>Hindou(e)</option><option>Autre</option><option>Préfère ne pas répondre</option></select></div>
+<div><label>Je recherche *</label><select required><option value="">Choisir</option><option>Un homme</option><option>Une femme</option></select></div>
+<div><label>Âge recherché : de *</label><input type="number" min="18" required></div><div><label>À *</label><input type="number" min="18" required></div></div>
+<br><label>À propos de toi *</label><textarea required></textarea>
+<div class="private"><b>🔒 Informations privées — administrateur uniquement</b><p>Ces informations ne seront jamais affichées aux autres membres.</p><div class="grid"><div><label>Numéro de téléphone *</label><input type="tel" required placeholder="+230..."></div><div><label>Surnom privé *</label><input required></div></div></div>
+<br><label><input type="checkbox" required style="width:auto"> J’accepte les conditions d’utilisation et la politique de confidentialité.</label>
+<h2 style="color:var(--pink)">Inscription — 45 €</h2><div class="payment"><button class="pay">💳 Visa / Mastercard</button><button class="pay">🟠 Orange Money</button><button class="pay">🅿️ PayPal</button></div><br><button class="btn" style="width:100%">Payer 45 € et publier mon profil</button>
+<p style="color:#777">Le paiement réel et la publication automatique nécessitent la connexion des services de paiement et d’une base de données.</p></div></section>
+<footer>💞 Queen Natty Africa — Rencontre sérieuse<br><small>L’amour n’a pas de frontières.</small></footer>
+</body></html>"""
+(out/"index.html").write_text(html,encoding="utf-8")
+zip_path=Path("/mnt/data/queen-natty-africa-site-web.zip")
+with zipfile.ZipFile(zip_path,"w",zipfile.ZIP_DEFLATED) as z:z.write(out/"index.html","index.html")
+print(zip_path)
