@@ -1,179 +1,67 @@
-import os, zipfile, shutil
+gener moi sa en site web stp merci  
 
-root="/mnt/data/rencontre_international_v2"
-os.makedirs(root, exist_ok=True)
+It seems like I can’t do more advanced data analysis right now. Please try again later. 
 
-files = {
-"README.md": """# Rencontre International — Version 2
+You’re out of data analysis for now. Start a free Plus trial for more, or try again tomorrow after 12:12 AM.
+Try Plus free
 
-Prototype international du site de rencontre.
 
-Inclus :
-- inscription internationale
-- formulaire obligatoire complet
-- champ « À propos de moi »
-- e-mail et téléphone
-- étape de vérification par code
-- paiement de 45 € avant activation
-- profils publics
-- e-mail, téléphone et surnom masqués publiquement
-- bouton « Intéressé »
-- espace administrateur prévu
 
-Important : il s'agit d'un prototype. Une mise en production nécessite un backend,
-une base de données, une vraie vérification e-mail/SMS, une passerelle de paiement,
-un stockage sécurisé des photos et une authentification administrateur.
-""",
-"index.html": """<!doctype html>
-<html lang="fr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Rencontre International</title>
-<link rel="stylesheet" href="style.css">
-</head>
+
+from pathlib import Path
+import zipfile
+
+out = Path("/mnt/data/queen-natty-africa-site-web")
+out.mkdir(exist_ok=True)
+html = """<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Queen Natty Africa — Rencontre sérieuse</title>
+<style>
+:root{--pink:#c90062;--gold:#f5b51b;--cream:#fff8f2;--ink:#251a32}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:var(--ink);background:#fffaf7}
+header{background:#fff;padding:16px 5%;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 12px #0001;position:sticky;top:0;z-index:4}.logo{font-size:27px;font-weight:800;color:var(--pink)}nav a{margin:0 10px;text-decoration:none;color:#251a32}.btn{border:0;border-radius:28px;padding:13px 22px;background:var(--pink);color:white;font-weight:700;cursor:pointer}
+.hero{min-height:470px;padding:60px 7%;display:flex;align-items:center;color:white;background:linear-gradient(90deg,#55143dbb,#0002),url('https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1800&q=85') center/cover}.hero h1{font-size:50px;max-width:600px;margin:0 0 15px}.hero p{font-size:19px;max-width:560px;line-height:1.6}
+.wrap{max-width:1200px;margin:auto;padding:0 20px}.search{background:#fff;margin-top:-35px;position:relative;border-radius:18px;padding:22px;box-shadow:0 5px 25px #0002}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}input,select,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;font-size:15px}textarea{min-height:100px}
+h2{font-size:28px}.profiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}.card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 5px 20px #0001}.photo{height:250px;background:#eee;display:flex;align-items:center;justify-content:center;font-size:65px}.cardbody{padding:15px}.muted{color:#6c6470;line-height:1.6}.badge{display:inline-block;background:#fff0f6;color:var(--pink);padding:5px 9px;border-radius:20px;font-size:12px}
+.steps{background:var(--cream);padding:38px 0;margin-top:45px}.stepgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}.step{text-align:center}.num{display:inline-flex;width:45px;height:45px;border-radius:50%;align-items:center;justify-content:center;background:var(--pink);color:#fff;font-weight:800}
+.signup{background:linear-gradient(135deg,#a90055,#d92b78);padding:45px 0}.panel{background:#fff;border-radius:18px;padding:28px;max-width:920px;margin:auto}.private{background:#fff7ed;border:1px solid #f2d4b4;padding:16px;border-radius:12px;margin-top:15px}.payment{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.pay{padding:18px;border:1px solid #ddd;border-radius:12px;background:#fff;font-weight:700;cursor:pointer}footer{background:#25102a;color:#fff;text-align:center;padding:28px}
+@media(max-width:700px){nav{display:none}.hero h1{font-size:36px}.stepgrid,.payment{grid-template-columns:1fr}}
+</style></head>
 <body>
-<header><strong>Rencontre International</strong>
-<nav><a href="#profils">Profils</a><a href="#inscription">Inscription</a><a href="#admin">Administration</a></nav></header>
-
-<section class="hero">
-<h1>Rencontrez des personnes du monde entier</h1>
-<p>Profils internationaux, vérification des contacts et mise en relation sécurisée.</p>
-<a class="btn" href="#inscription">Créer mon profil</a>
-</section>
-
-<main>
-<section id="profils">
-<h2>Profils</h2>
-<p class="notice">E-mail, téléphone et surnom sont privés et ne sont pas affichés publiquement.</p>
-<div class="cards">
-<article class="card"><div class="avatar">🌍</div><h3>Profil exemple</h3>
-<p><b>32 ans</b> · Exemple</p><p>Profession : Professionnelle</p>
-<p>Religion : À compléter</p><p>« J'aime voyager, faire du sport et découvrir de nouvelles personnes. »</p>
-<button class="btn interest">Intéressé</button></article>
-<article class="card"><div class="avatar">🌎</div><h3>Profil exemple</h3>
-<p><b>40 ans</b> · Exemple</p><p>Profession : Professionnel</p>
-<p>Religion : À compléter</p><p>« Je suis une personne calme, sociable et j'aime la musique. »</p>
-<button class="btn interest">Intéressé</button></article>
-</div>
-</section>
-
-<section id="inscription">
-<h2>Créer mon profil</h2>
-<form id="registration">
-<label>Nom<input required name="nom"></label>
-<label>Prénom<input required name="prenom"></label>
-<label>Surnom<input required name="surnom"></label>
-<label>E-mail<input required type="email" name="email"></label>
-<label>Téléphone<input required type="tel" name="telephone"></label>
-<label>Photo<input required type="file" accept="image/*" name="photo"></label>
-<label>Âge<input required type="number" min="18" name="age"></label>
-<label>Pays<input required name="pays"></label>
-<label>Ville<input required name="ville"></label>
-<label>Profession<input required name="profession"></label>
-<label>Religion<input required name="religion"></label>
-<label>Religion recherchée<input required name="religion_recherchee"></label>
-<label>Âge minimum recherché<input required type="number" min="18" name="age_min"></label>
-<label>Âge maximum recherché<input required type="number" min="18" name="age_max"></label>
-<label class="full">À propos de moi
-<textarea required name="description" minlength="20" placeholder="Décris-toi : personnalité, loisirs, centres d'intérêt..."></textarea></label>
-<div class="full check"><input required type="checkbox" id="contactok">
-<label for="contactok">J'accepte la vérification de mon e-mail et de mon téléphone.</label></div>
-<button class="btn full" type="submit">Continuer vers la vérification</button>
-</form>
-
-<div id="verify" class="panel hidden">
-<h3>Vérification</h3>
-<p>Dans la version finale, un code sera envoyé par e-mail et/ou SMS.</p>
-<input id="code" placeholder="Code à 6 chiffres" maxlength="6" inputmode="numeric">
-<button class="btn" id="verifyBtn">Vérifier</button>
-</div>
-
-<div id="payment" class="panel hidden">
-<h3>Paiement</h3><p><b>Prix : 45 €</b></p>
-<p>Carte bancaire · PayPal · Apple Pay · Google Pay · moyens locaux selon le pays.</p>
-<button class="btn" id="payBtn">Procéder au paiement</button>
-</div>
-<p id="status"></p>
-</section>
-
-<section id="admin">
-<h2>Espace administrateur</h2>
-<p>Zone privée prévue pour gérer les membres, paiements et demandes « Intéressé ».
-L'administrateur pourra voir les informations complètes, contrairement au public.</p>
-</section>
-</main>
-<footer>© Rencontre International</footer>
-<script src="app.js"></script>
-</body>
-</html>""",
-"style.css": """*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f7f7fb;color:#20202a}
-header{display:flex;justify-content:space-between;padding:18px 6%;background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:3}
-nav a{margin-left:18px;color:#333;text-decoration:none}.hero{text-align:center;padding:75px 6%;background:#ecebff}
-.hero h1{font-size:42px}.hero p{font-size:18px}main section{max-width:1050px;margin:auto;padding:50px 6%}
-h2{font-size:30px}.btn{display:inline-block;border:0;border-radius:10px;padding:12px 18px;background:#222;color:#fff;cursor:pointer;text-decoration:none;margin-top:8px}
-.notice{background:#fff3cd;padding:14px;border-radius:8px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
-.card,.panel{background:#fff;padding:22px;border-radius:14px;box-shadow:0 3px 14px #00000010;margin-top:18px}.avatar{font-size:55px}
-form{display:grid;grid-template-columns:1fr 1fr;gap:15px;background:#fff;padding:24px;border-radius:14px}
-label{display:flex;flex-direction:column;gap:7px;font-weight:600}input,textarea{padding:12px;border:1px solid #ccc;border-radius:8px;font:inherit}
-textarea{min-height:120px;resize:vertical}.full{grid-column:1/-1}.check{display:flex;flex-direction:row;align-items:center}.check label{display:block}.check input{width:auto}
-.hidden{display:none}footer{text-align:center;padding:30px;background:#fff}@media(max-width:650px){header{flex-direction:column;gap:12px}nav a{margin-left:0;margin-right:12px}.hero h1{font-size:32px}form{grid-template-columns:1fr}}""",
-"app.js": """const form=document.getElementById('registration');
-const verify=document.getElementById('verify');
-const payment=document.getElementById('payment');
-const status=document.getElementById('status');
-
-form.addEventListener('submit',e=>{
- e.preventDefault();
- const d=new FormData(form), age=+d.get('age'), min=+d.get('age_min'), max=+d.get('age_max');
- if(age<18){status.textContent='La plateforme est réservée aux adultes.';return}
- if(min>max){status.textContent='L’âge minimum recherché ne peut pas dépasser l’âge maximum.';return}
- verify.classList.remove('hidden');
- status.textContent='Étape de vérification : entre le code reçu par e-mail/SMS.';
-});
-
-document.getElementById('verifyBtn').onclick=()=>{
- const code=document.getElementById('code').value.trim();
- if(!/^\\d{6}$/.test(code)){status.textContent='Entre un code à 6 chiffres.';return}
- verify.classList.add('hidden');
- payment.classList.remove('hidden');
- status.textContent='Contact vérifié. Étape suivante : paiement sécurisé de 45 €.';
-};
-
-document.getElementById('payBtn').onclick=()=>{
- status.textContent='Le paiement réel doit être connecté à une passerelle. Le profil sera activé uniquement après confirmation serveur.';
-};
-
-document.querySelectorAll('.interest').forEach(b=>b.onclick=()=>{
- alert('Dans la version finale, cette demande sera enregistrée dans ton espace administrateur.');
-});""",
-"SECURITY_AND_PRODUCTION.md": """# Passage en production
-
-Ce ZIP est un prototype d'interface.
-
-La version finale doit ajouter :
-1. backend et base de données ;
-2. authentification sécurisée ;
-3. vérification réelle par e-mail et SMS ;
-4. stockage privé des photos ;
-5. passerelle de paiement et webhook serveur ;
-6. activation du profil uniquement après paiement confirmé ;
-7. espace administrateur protégé par authentification forte ;
-8. chiffrement et protection des données personnelles ;
-9. signalement et blocage des utilisateurs ;
-10. politique de confidentialité et conditions d'utilisation.
-
-Le prix est fixé à 45 EUR. Les données de carte bancaire ne doivent pas être stockées directement par le site : utiliser la page/tokenisation du prestataire de paiement.
-"""
-}
-
-for name, content in files.items():
-    with open(os.path.join(root,name),"w",encoding="utf-8") as f:
-        f.write(content)
-
-zip_path="/mnt/data/rencontre_international_v2.zip"
-with zipfile.ZipFile(zip_path,"w",zipfile.ZIP_DEFLATED) as z:
-    for name in files:
-        z.write(os.path.join(root,name), name)
-
+<header><div><span class="logo">💞 Queen Natty Africa</span><small> Rencontre sérieuse</small></div><nav><a href="#recherche">Rechercher</a><a href="#profils">Profils</a><a href="#inscription">Inscription</a></nav><button class="btn" onclick="location.hash='inscription'">Créer mon profil</button></header>
+<section class="hero"><div><h1>Trouvez l’amour qui vous ressemble</h1><p>Une communauté de personnes sérieuses, sincères et engagées.</p><button class="btn" onclick="location.hash='inscription'">Créer mon profil</button></div></section>
+<main class="wrap">
+<section id="recherche" class="search"><h2>Rechercher un profil</h2><div class="grid">
+<div><label>Je recherche</label><select><option>Une femme</option><option>Un homme</option></select></div>
+<div><label>De quel âge ?</label><input type="number" min="18" value="18"></div><div><label>À quel âge ?</label><input type="number" min="18" value="55"></div>
+<div><label>Pays</label><select><option>Tous les pays</option><option>Île Maurice</option><option>Madagascar</option><option>Bénin</option><option>Togo</option><option>Côte d’Ivoire</option><option>Cameroun</option></select></div>
+<div><label>Religion</label><select><option>Toutes les religions</option><option>Chrétien(ne)</option><option>Musulman(e)</option><option>Hindou(e)</option><option>Autre</option></select></div>
+<div style="align-self:end"><button class="btn" style="width:100%">🔎 Rechercher</button></div></div></section>
+<section id="profils"><h2>💗 Profils récents</h2><div class="profiles">
+<div class="card"><div class="photo">👩🏾</div><div class="cardbody"><h3>Aissatou ❤️</h3><div class="muted">28 ans · Côte d’Ivoire<br>Musulmane</div><p>Femme douce et sincère, j’aime découvrir de nouvelles cultures.</p><span class="badge">Rencontre sérieuse</span></div></div>
+<div class="card"><div class="photo">👨🏾</div><div class="cardbody"><h3>Mamadou ❤️</h3><div class="muted">32 ans · Sénégal<br>Musulman</div><p>J’aime les voyages et les belles rencontres.</p><span class="badge">Rencontre sérieuse</span></div></div>
+<div class="card"><div class="photo">👩🏾</div><div class="cardbody"><h3>Fatou ❤️</h3><div class="muted">25 ans · Mali<br>Chrétienne</div><p>Simple, respectueuse et à la recherche d’une relation sérieuse.</p><span class="badge">Rencontre sérieuse</span></div></div>
+<div class="card"><div class="photo">👨🏾</div><div class="cardbody"><h3>Issa ❤️</h3><div class="muted">36 ans · Bénin<br>Chrétien</div><p>Travailleur et attentionné, je veux construire une belle histoire.</p><span class="badge">Rencontre sérieuse</span></div></div>
+</div></section></main>
+<section class="steps"><div class="wrap"><h2 style="text-align:center;color:var(--pink)">Comment ça marche ?</h2><div class="stepgrid">
+<div class="step"><span class="num">1</span><h3>Inscription complète</h3><p>Tous les champs obligatoires doivent être remplis.</p></div>
+<div class="step"><span class="num">2</span><h3>Paiement immédiat</h3><p>45 € pour continuer.</p></div>
+<div class="step"><span class="num">3</span><h3>Publication</h3><p>Après paiement confirmé, l’annonce est publiée.</p></div>
+<div class="step"><span class="num">4</span><h3>Échanger</h3><p>Découvrez les profils qui vous correspondent.</p></div></div></div></section>
+<section id="inscription" class="signup"><div class="panel"><h2>Créer mon profil</h2><p><b>Tous les champs sont obligatoires.</b> Après l’inscription complète, le paiement de 45 € est demandé immédiatement.</p>
+<div class="grid">
+<div><label>📷 Photo *</label><input type="file" accept="image/*" required></div><div><label>Nom / prénom affiché *</label><input required></div>
+<div><label>Âge *</label><input type="number" min="18" required></div><div><label>Pays *</label><input required></div>
+<div><label>Religion *</label><select required><option value="">Choisir</option><option>Chrétien(ne)</option><option>Musulman(e)</option><option>Hindou(e)</option><option>Autre</option><option>Préfère ne pas répondre</option></select></div>
+<div><label>Je recherche *</label><select required><option value="">Choisir</option><option>Un homme</option><option>Une femme</option></select></div>
+<div><label>Âge recherché : de *</label><input type="number" min="18" required></div><div><label>À *</label><input type="number" min="18" required></div></div>
+<br><label>À propos de toi *</label><textarea required></textarea>
+<div class="private"><b>🔒 Informations privées — administrateur uniquement</b><p>Ces informations ne seront jamais affichées aux autres membres.</p><div class="grid"><div><label>Numéro de téléphone *</label><input type="tel" required placeholder="+230..."></div><div><label>Surnom privé *</label><input required></div></div></div>
+<br><label><input type="checkbox" required style="width:auto"> J’accepte les conditions d’utilisation et la politique de confidentialité.</label>
+<h2 style="color:var(--pink)">Inscription — 45 €</h2><div class="payment"><button class="pay">💳 Visa / Mastercard</button><button class="pay">🟠 Orange Money</button><button class="pay">🅿️ PayPal</button></div><br><button class="btn" style="width:100%">Payer 45 € et publier mon profil</button>
+<p style="color:#777">Le paiement réel et la publication automatique nécessitent la connexion des services de paiement et d’une base de données.</p></div></section>
+<footer>💞 Queen Natty Africa — Rencontre sérieuse<br><small>L’amour n’a pas de frontières.</small></footer>
+</body></html>"""
+(out/"index.html").write_text(html,encoding="utf-8")
+zip_path=Path("/mnt/data/queen-natty-africa-site-web.zip")
+with zipfile.ZipFile(zip_path,"w",zipfile.ZIP_DEFLATED) as z:z.write(out/"index.html","index.html")
 print(zip_path)
