@@ -1,0 +1,179 @@
+import os, zipfile, shutil
+
+root="/mnt/data/rencontre_international_v2"
+os.makedirs(root, exist_ok=True)
+
+files = {
+"README.md": """# Rencontre International — Version 2
+
+Prototype international du site de rencontre.
+
+Inclus :
+- inscription internationale
+- formulaire obligatoire complet
+- champ « À propos de moi »
+- e-mail et téléphone
+- étape de vérification par code
+- paiement de 45 € avant activation
+- profils publics
+- e-mail, téléphone et surnom masqués publiquement
+- bouton « Intéressé »
+- espace administrateur prévu
+
+Important : il s'agit d'un prototype. Une mise en production nécessite un backend,
+une base de données, une vraie vérification e-mail/SMS, une passerelle de paiement,
+un stockage sécurisé des photos et une authentification administrateur.
+""",
+"index.html": """<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rencontre International</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><strong>Rencontre International</strong>
+<nav><a href="#profils">Profils</a><a href="#inscription">Inscription</a><a href="#admin">Administration</a></nav></header>
+
+<section class="hero">
+<h1>Rencontrez des personnes du monde entier</h1>
+<p>Profils internationaux, vérification des contacts et mise en relation sécurisée.</p>
+<a class="btn" href="#inscription">Créer mon profil</a>
+</section>
+
+<main>
+<section id="profils">
+<h2>Profils</h2>
+<p class="notice">E-mail, téléphone et surnom sont privés et ne sont pas affichés publiquement.</p>
+<div class="cards">
+<article class="card"><div class="avatar">🌍</div><h3>Profil exemple</h3>
+<p><b>32 ans</b> · Exemple</p><p>Profession : Professionnelle</p>
+<p>Religion : À compléter</p><p>« J'aime voyager, faire du sport et découvrir de nouvelles personnes. »</p>
+<button class="btn interest">Intéressé</button></article>
+<article class="card"><div class="avatar">🌎</div><h3>Profil exemple</h3>
+<p><b>40 ans</b> · Exemple</p><p>Profession : Professionnel</p>
+<p>Religion : À compléter</p><p>« Je suis une personne calme, sociable et j'aime la musique. »</p>
+<button class="btn interest">Intéressé</button></article>
+</div>
+</section>
+
+<section id="inscription">
+<h2>Créer mon profil</h2>
+<form id="registration">
+<label>Nom<input required name="nom"></label>
+<label>Prénom<input required name="prenom"></label>
+<label>Surnom<input required name="surnom"></label>
+<label>E-mail<input required type="email" name="email"></label>
+<label>Téléphone<input required type="tel" name="telephone"></label>
+<label>Photo<input required type="file" accept="image/*" name="photo"></label>
+<label>Âge<input required type="number" min="18" name="age"></label>
+<label>Pays<input required name="pays"></label>
+<label>Ville<input required name="ville"></label>
+<label>Profession<input required name="profession"></label>
+<label>Religion<input required name="religion"></label>
+<label>Religion recherchée<input required name="religion_recherchee"></label>
+<label>Âge minimum recherché<input required type="number" min="18" name="age_min"></label>
+<label>Âge maximum recherché<input required type="number" min="18" name="age_max"></label>
+<label class="full">À propos de moi
+<textarea required name="description" minlength="20" placeholder="Décris-toi : personnalité, loisirs, centres d'intérêt..."></textarea></label>
+<div class="full check"><input required type="checkbox" id="contactok">
+<label for="contactok">J'accepte la vérification de mon e-mail et de mon téléphone.</label></div>
+<button class="btn full" type="submit">Continuer vers la vérification</button>
+</form>
+
+<div id="verify" class="panel hidden">
+<h3>Vérification</h3>
+<p>Dans la version finale, un code sera envoyé par e-mail et/ou SMS.</p>
+<input id="code" placeholder="Code à 6 chiffres" maxlength="6" inputmode="numeric">
+<button class="btn" id="verifyBtn">Vérifier</button>
+</div>
+
+<div id="payment" class="panel hidden">
+<h3>Paiement</h3><p><b>Prix : 45 €</b></p>
+<p>Carte bancaire · PayPal · Apple Pay · Google Pay · moyens locaux selon le pays.</p>
+<button class="btn" id="payBtn">Procéder au paiement</button>
+</div>
+<p id="status"></p>
+</section>
+
+<section id="admin">
+<h2>Espace administrateur</h2>
+<p>Zone privée prévue pour gérer les membres, paiements et demandes « Intéressé ».
+L'administrateur pourra voir les informations complètes, contrairement au public.</p>
+</section>
+</main>
+<footer>© Rencontre International</footer>
+<script src="app.js"></script>
+</body>
+</html>""",
+"style.css": """*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f7f7fb;color:#20202a}
+header{display:flex;justify-content:space-between;padding:18px 6%;background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:3}
+nav a{margin-left:18px;color:#333;text-decoration:none}.hero{text-align:center;padding:75px 6%;background:#ecebff}
+.hero h1{font-size:42px}.hero p{font-size:18px}main section{max-width:1050px;margin:auto;padding:50px 6%}
+h2{font-size:30px}.btn{display:inline-block;border:0;border-radius:10px;padding:12px 18px;background:#222;color:#fff;cursor:pointer;text-decoration:none;margin-top:8px}
+.notice{background:#fff3cd;padding:14px;border-radius:8px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.card,.panel{background:#fff;padding:22px;border-radius:14px;box-shadow:0 3px 14px #00000010;margin-top:18px}.avatar{font-size:55px}
+form{display:grid;grid-template-columns:1fr 1fr;gap:15px;background:#fff;padding:24px;border-radius:14px}
+label{display:flex;flex-direction:column;gap:7px;font-weight:600}input,textarea{padding:12px;border:1px solid #ccc;border-radius:8px;font:inherit}
+textarea{min-height:120px;resize:vertical}.full{grid-column:1/-1}.check{display:flex;flex-direction:row;align-items:center}.check label{display:block}.check input{width:auto}
+.hidden{display:none}footer{text-align:center;padding:30px;background:#fff}@media(max-width:650px){header{flex-direction:column;gap:12px}nav a{margin-left:0;margin-right:12px}.hero h1{font-size:32px}form{grid-template-columns:1fr}}""",
+"app.js": """const form=document.getElementById('registration');
+const verify=document.getElementById('verify');
+const payment=document.getElementById('payment');
+const status=document.getElementById('status');
+
+form.addEventListener('submit',e=>{
+ e.preventDefault();
+ const d=new FormData(form), age=+d.get('age'), min=+d.get('age_min'), max=+d.get('age_max');
+ if(age<18){status.textContent='La plateforme est réservée aux adultes.';return}
+ if(min>max){status.textContent='L’âge minimum recherché ne peut pas dépasser l’âge maximum.';return}
+ verify.classList.remove('hidden');
+ status.textContent='Étape de vérification : entre le code reçu par e-mail/SMS.';
+});
+
+document.getElementById('verifyBtn').onclick=()=>{
+ const code=document.getElementById('code').value.trim();
+ if(!/^\\d{6}$/.test(code)){status.textContent='Entre un code à 6 chiffres.';return}
+ verify.classList.add('hidden');
+ payment.classList.remove('hidden');
+ status.textContent='Contact vérifié. Étape suivante : paiement sécurisé de 45 €.';
+};
+
+document.getElementById('payBtn').onclick=()=>{
+ status.textContent='Le paiement réel doit être connecté à une passerelle. Le profil sera activé uniquement après confirmation serveur.';
+};
+
+document.querySelectorAll('.interest').forEach(b=>b.onclick=()=>{
+ alert('Dans la version finale, cette demande sera enregistrée dans ton espace administrateur.');
+});""",
+"SECURITY_AND_PRODUCTION.md": """# Passage en production
+
+Ce ZIP est un prototype d'interface.
+
+La version finale doit ajouter :
+1. backend et base de données ;
+2. authentification sécurisée ;
+3. vérification réelle par e-mail et SMS ;
+4. stockage privé des photos ;
+5. passerelle de paiement et webhook serveur ;
+6. activation du profil uniquement après paiement confirmé ;
+7. espace administrateur protégé par authentification forte ;
+8. chiffrement et protection des données personnelles ;
+9. signalement et blocage des utilisateurs ;
+10. politique de confidentialité et conditions d'utilisation.
+
+Le prix est fixé à 45 EUR. Les données de carte bancaire ne doivent pas être stockées directement par le site : utiliser la page/tokenisation du prestataire de paiement.
+"""
+}
+
+for name, content in files.items():
+    with open(os.path.join(root,name),"w",encoding="utf-8") as f:
+        f.write(content)
+
+zip_path="/mnt/data/rencontre_international_v2.zip"
+with zipfile.ZipFile(zip_path,"w",zipfile.ZIP_DEFLATED) as z:
+    for name in files:
+        z.write(os.path.join(root,name), name)
+
+print(zip_path)
